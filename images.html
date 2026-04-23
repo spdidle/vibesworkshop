@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Links</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header style="text-align: center; padding: 2.5rem 1rem 1.5rem 1rem; background-color: #cbdaf0; border-bottom-left-radius: 30px; border-bottom-right-radius: 30px; margin-bottom: 2rem; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
+        <a href="index.html" style="text-decoration: none;"><button class="cta-button" style="margin-bottom: 1.2rem; margin-right: auto;">← Back</button></a>
+        <h1 style="font-weight: 800; color: #557153; font-size: 2.2rem; margin-bottom: 0.5rem;">Image Links</h1>
+    </header>
+    <section class="image-upload-section">
+        <form id="uploadForm">
+            <label for="imageInput">Upload an image (or paste a link):</label>
+            <input type="file" id="imageInput" accept="image/*">
+            <br>
+            <input type="url" id="imageUrlInput" placeholder="Paste image URL here" style="width: 80%; padding: 0.5rem; border-radius: 10px; border: 1px solid #f68981; margin: 1rem 0;">
+            <br>
+            <label for="bulkImageLinks" style="margin-top:1rem;">Or paste multiple image URLs (one per line):</label>
+            <textarea id="bulkImageLinks" rows="4" placeholder="Paste multiple image URLs here, one per line" style="width: 90%; padding: 0.5rem; border-radius: 10px; border: 1px solid #f68981; margin: 1rem 0;"></textarea>
+            <br>
+            <button type="submit">Add Image(s)</button>
+        </form>
+    </section>
+    <ul id="image-links" style="list-style: none; padding: 0; margin-top: 2rem;">
+        <li style="margin-bottom: 1.5rem;">
+            <img src="https://t4.ftcdn.net/jpg/08/64/00/65/360_F_864006581_nZtsnK3RG18p4OcQ5EB9EgwWP57YM8lm.jpg" alt="Image 1" style="max-width: 300px; border-radius: 16px; box-shadow: 0 2px 8px #f6898140; display: block; margin: 0 auto 0.5rem;">
+            <div style="text-align:center; color:#f68981; font-size:1rem;">Image 1</div>
+        </li>
+        <li style="margin-bottom: 1.5rem;">
+            <img src="https://static.vecteezy.com/system/resources/thumbnails/052/176/185/small/close-up-of-hand-on-the-french-horn-during-philharmonic-concert-art-concept-photo.jpg" alt="Image 2" style="max-width: 300px; border-radius: 16px; box-shadow: 0 2px 8px #f6898140; display: block; margin: 0 auto 0.5rem;">
+            <div style="text-align:center; color:#f68981; font-size:1rem;">Image 2</div>
+        </li>
+    </ul>
+    <style>
+        body {
+            background-color: #fdfbf7;
+            font-family: 'Nunito', sans-serif;
+            color: #4a4a4a;
+        }
+    </style>
+    <script>
+    // Helper to display images
+    const form = document.getElementById('uploadForm');
+    const imageLinks = document.getElementById('image-links');
+    const imageInput = document.getElementById('imageInput');
+    const imageUrlInput = document.getElementById('imageUrlInput');
+
+
+    const bulkInput = document.getElementById('bulkImageLinks');
+
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        // Handle file upload
+        if (imageInput.files && imageInput.files[0]) {
+            const file = imageInput.files[0];
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                addImage(event.target.result, file.name);
+            };
+            reader.readAsDataURL(file);
+            imageInput.value = '';
+        } else if (imageUrlInput.value) {
+            addImage(imageUrlInput.value, imageUrlInput.value);
+            imageUrlInput.value = '';
+        }
+        // Handle bulk pasted links
+        if (bulkInput.value) {
+            const urls = bulkInput.value.split(/\r?\n/).map(u => u.trim()).filter(Boolean);
+            urls.forEach(url => addImage(url, url));
+            bulkInput.value = '';
+        }
+    });
+
+    function addImage(src, label) {
+        const li = document.createElement('li');
+        li.style.marginBottom = '1.5rem';
+        li.innerHTML = `<img src="${src}" alt="${label}" style="max-width: 300px; border-radius: 16px; box-shadow: 0 2px 8px #f6898140; display: block; margin: 0 auto 0.5rem;">` +
+            `<div style="text-align:center; color:#f68981; font-size:1rem;">${label}</div>`;
+        imageLinks.appendChild(li);
+    }
+    </script>
+</body>
+</html>
